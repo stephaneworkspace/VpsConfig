@@ -1,0 +1,2 @@
+# ccat or cat (my cat is bat with line number, ccat is without)
+ccat ~/.ssh/id_rsa.pub | ssh stephane@51.77.222.139 "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
