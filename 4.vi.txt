@@ -1,3 +1,6 @@
 git clone https://github.com/stephaneworkspace/vi.git
 cd vi
 cat README.md
+# and then
+cd ..
+rm -rf vi

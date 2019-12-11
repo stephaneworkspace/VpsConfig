@@ -1,0 +1,30 @@
+# Simple ftp for usage of azure pipeline
+su
+apt-get update
+apt-get upgrade
+apt install vsftpd
+# Check the service
+systemctl status vsftpd
+# Config
+vi /etc/vsftpd.conf
+
+listen=YES
+#listen_ipv6=NO
+anonymous_enable=NO
+write_enable=YES
+chroot_local_user=YES
+chroot_list_enable=YES
+chroot_list_file=/etc/vsftpd.chroot_list
+
+# User list
+vi /etc/vsftpd.chroot_list
+myusername
+
+# Config file without #
+cat /etc/vsftpd.conf | grep -v "^#"
+
+# Reboot
+systemctl restart vsftpd
+
+# Status
+systemctl status vsftpd
