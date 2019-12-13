@@ -1,0 +1,5 @@
+# Info
+hostnamectl
+# Change
+su
+sudo hostnamectl set-hostname www.partages-web.net

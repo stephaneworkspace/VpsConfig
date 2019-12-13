@@ -8,3 +8,12 @@ sudo -u postgres -i
 psql
 \password
 change the password
+# check if port open
+netstap -nlp | grep 5432
+# if 127.0.0.1
+vi /etc/postgresql/12/main/postgresql.conf
+"*"
+vi /etc/postgresql/12/main/pg_hba.conf
+host  all  all 0.0.0.0/0 md5:wq
+# and then
+sydstemctl restart postgresql.service

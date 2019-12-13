@@ -1,0 +1,51 @@
+su
+apt-get install nginx
+# reverse proxy
+cd /etc/nginx/site-available/
+vi www.partages-web.net.conf
+
+server {
+    #listen 80; # Only if sysctl net.ipv6.bindv6only = 1
+    listen 80;
+    listen [::]:80;
+
+    server_name partages-web.net www.partages-web.net; # 1.
+
+    location / {
+        # Forward requests to rocket v4.0 production port
+        proxy_pass http://51.77.222.139:8000; # 2.
+        proxy_buffering off; # Single Page App work faster with it
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+
+# end
+
+# test syntax
+sudo nginx -t
+# symbolic link
+cd /etc/nginx/sites-enabled && sudo ln -s ../sites-available/www.partages-web.net.conf
+# conf
+cd /etc/nginx/
+vi nginx.conf
+
+#inside nginx.conf(/etc/nginx/nginx.conf)
+
+##
+# Gzip Settings
+##
+
+gzip on;
+gzip_disable "msie6";
+
+gzip_vary on;
+gzip_proxied any;
+gzip_comp_level 5; # it is better not to be larger than 5
+gzip_buffers 16 8k;
+gzip_http_version 1.1;
+
+# write what you want to be served as gzip compressed file when use requested it.
+
+gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+
+# end
