@@ -181,3 +181,4 @@ vi /etc/cron.d/certbot
 # and then test it
 sudo certbot renew --dry-run
 
+8080 => vue.js
