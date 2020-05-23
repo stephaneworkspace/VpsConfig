@@ -38,6 +38,8 @@ vi /etc/postfix/main.cf
 home_mailbox = Maildir/
 # En commentaire pour le moment
 #mailbox_command = procmail -a "$EXTENSION"
+# peut être utile plus tard ? tuto wiki.debian-fr.xy
+# ca fonctionne sans en tout cas
 
 /etc/init.d/postfix restart
 
@@ -46,4 +48,89 @@ echo "Le contenu du mail" | mail -s "ceci est le sujet" stephane@domaine.net
 
 apt-get install dovecot-imapd
 
-wiki.debian-fr.xyz
+vi /etc/dovecot/conf.d/10-mail.conf
+mail_location = maildir:~/Maildir
+
+vi /etc/dovecot/conf.d/10-master.conf
+service auth {
+  unix_listener /var/spool/postfix/private/auth {
+    mode = 0660
+    user = postfix
+    group = postfix
+  }
+}
+
+/etc/init.d/dovecot restart
+
+# pour utiliser son fai pour hotmail.fr yahoo.fr hotmail.com yahoo.com avec 
+smpt.free.fr par exemple voir tuto wiki.debian-fr.xyz
+
+/etc/postfix/transport
+
+hotmail.fr smtp:smtp.free.fr
+#etc...
+
+# puis
+postmap /etc/postfix/transport
+
+# puis ensuite pour continuer la config de postfix
+
+# Activer l'identification SASL
+smtpd_sasl_auth_enable = yes
+
+# Utiliser le service d'identification de Dovecot
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth
+
+# Noter dans les en-tête des messages l'identifiant de l'utilisateur.
+smtpd_sasl_authenticated_header = yes
+
+# Règles pour accepter ou refuser une connexion :
+# - on attend une seconde (pour piéger les zombies) ;
+# - on interdit la parallélisation là où il n'est pas sensé y en avoir.
+smtpd_client_restrictions =
+   permit_mynetworks, permit_sasl_authenticated,
+   sleep 1, reject_unauth_pipelining
+
+# Règles pour accepter ou refuser un message, dès lors qu'on connaît le nom
+# de l'hôte de l'expéditeur (par sa commande HELO ou EHLO) :
+# - on refuse les noms d'hôte invalides.
+smtpd_helo_restrictions = reject_invalid_helo_hostname
+
+# Règles pour accepter ou refuser un message, dès lors qu'on connaît l'adresse
+# de l'expéditeur :
+# - s'il vient d'un expéditeur inexistant de notre domaine, on le rejette ;
+# - si le domaine de l'expéditeur n'a pas d'IP ou de MX, on le refuse ;
+# - s'il vient d'un client sûr ou d'un client authentifié, on l'accepte ;
+# - si l'adresse de l'expéditeur n'est pas sous forme canonique, on le refuse.
+smtpd_sender_restrictions =
+   reject_unlisted_sender, reject_unknown_sender_domain,
+   permit_mynetworks, permit_sasl_authenticated,
+   reject_non_fqdn_sender
+
+# Règles pour accepter ou refuser un message, dès lors qu'on connaît le
+# destinataire (par la commande RCPT TO) :
+# - s'il est destiné à un expéditeur forgé chez nous, on le rejette ;
+# - s'il est destiné à un domaine forgé, on le rejette ;
+# - s'il vient d'un hôte sûr ou d'un client authentifié, on l'accepte ;
+# - si l'adresse de destination n'est pas sous forme canonique, on le refuse ;
+# - finalement, s'il n'est pas destiné à un domaine que l'on gère ou pour
+#   lequel on relaie, on le refuse.
+smtpd_recipient_restrictions =
+    reject_unlisted_recipient, reject_unknown_recipient_domain,
+    permit_mynetworks, permit_sasl_authenticated,
+    reject_non_fqdn_recipient,
+    reject_unauth_destination
+
+sudo postconf -e 'smtpd_tls_cert_file = /etc/letsencrypt/live/domain.net/fullchain.pem'
+sudo postconf -e 'smtpd_tls_key_file = /etc/letsencrypt/live/domaine.net/privkey.pem'
+sudo postconf -e 'smtpd_sasl_local_domain = '
+sudo postconf -e 'smtpd_sasl_security_options = noanonymous'
+sudo postconf -e 'broken_sasl_auth_clients = yes'
+sudo postconf -e 'smtpd_sasl_auth_enable = yes'
+
+sudo postconf -e 'smtpd_tls_security_level = may'
+sudo postconf -e 'smtpd_tls_security_level = may'
+sudo postconf -e 'smtp_tls_note_starttls_offer = yes'
+sudo postconf -e 'smtpd_tls_loglevel = 1'
+sudo postconf -e 'smtpd_tls_received_header = yes'
