@@ -1,0 +1,49 @@
+Ovh
+---
+effacer MX existant
+
+@ 		IN 	A 	IP
+domaine.net	IN	MX	10	smtp
+mail2		IN	A	300	IP
+domaine.net	IN 	MX	10	mail2
+smtp		IN	A	300	IP
+
+Debian 10
+---------
+
+host -t MX domaine.net
+ping smtp.domaine.net
+
+hostname
+
+# doit retourner le smtp
+
+# si ce n'est pas le cas vi /etc/hosts 
+127.0.01 smtp.domaine.net smtp
+
+# force with hostname smtp.domaine.net if mistake
+
+su
+sudo apt update
+apt install mailutils
+apt install postfix
+
+# if mistake
+sudo dpkg-reconfigure postfix
+
+# Configuration
+vi /etc/postfix/main.cf
+
+# Répertoire dans le dossier home de l'utilisateur
+home_mailbox = Maildir/
+# En commentaire pour le moment
+#mailbox_command = procmail -a "$EXTENSION"
+
+/etc/init.d/postfix restart
+
+# À l'aide de mailx (installé dans debian 10)
+echo "Le contenu du mail" | mail -s "ceci est le sujet" stephane@domaine.net
+
+apt-get install dovecot-imapd
+
+wiki.debian-fr.xyz

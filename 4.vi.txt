@@ -4,3 +4,21 @@ cat README.md
 # and then
 cd ..
 rm -rf vi
+
+# root
+syntax on
+:autocmd BufRead,BufNewFile *.conf setf dosini
+    \ set tabstop=2 |
+    \ set softtabstop=2 |
+    \ set shiftwidth=2 |
+    \ set expandtab |
+    \ set autoindent |
+    \ set fileformat=unix |
+syntax on
+:autocmd BufRead,BufNewFile *.cf setf dosini
+    \ set tabstop=2 |
+    \ set softtabstop=2 |
+    \ set shiftwidth=2 |
+    \ set expandtab |
+    \ set autoindent |
+    \ set fileformat=unix |
