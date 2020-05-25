@@ -1,0 +1,6 @@
+# no sudo
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# tools
+cargo install lsd
+cardo install bat

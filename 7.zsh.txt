@@ -1,0 +1,41 @@
+apt-get install zsh gits
+sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+chsh -s $(which zsh)
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
+# zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+apt-get install neofetch
+
+ZSH_THEME="powerlevel10k/powerlevel10k"
+POWERLEVEL9K_MODE='nerdfont-complete'
+
+plugins=(
+  brew
+  cargo
+  flutter
+  git
+  gradle
+  ng
+  npm
+  yarn
+  zsh-autosuggestions
+  osx
+  rust
+  xcode
+  sdkman
+)
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+#Include Z
+if command -v brew >/dev/null 2>&1; then
+  # Load rupa's z if installed
+  [ -f $(brew --prefix)/etc/profile.d/z.sh ] && source $(brew --prefix)/etc/profile.d/z.sh
+fi
+
+# Neofetch
+neofetch
+
+# Rust
+export RUST_SRC_PATH=${HOME}/.rustup/toolchains/nightly-x86_64-apple-darwin/lib/rustlib/src/rust/src
