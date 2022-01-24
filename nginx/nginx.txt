@@ -3,7 +3,8 @@ Instructions:
 sudo apt update
 https://www.nginx.com/blog/using-free-ssltls-certificates-from-lets-encrypt-with-nginx/
 
-
+sudo fuser -k 80/tcp
+sudo fuser -k 443/tcp
 
 
 
