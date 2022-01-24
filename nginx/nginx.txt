@@ -7,13 +7,16 @@ sudo fuser -k 80/tcp
 sudo fuser -k 443/tcp
 
 sudo apt upgrade -y && sudo apt update -y
-sudo apt install curl gnupg2 ca-certificates lsb-release
+sudo apt install curl gnupg2 ca-certificates lsb-release git npm
 sudo apt install nginx -y
 sudo systemctl status nginx
 sudo systemctl start nginx
 sudo systemctl stop nginx
 sudo systemctl restart nginx
 sudo nginx -t
+
+
+npm install --global yarn 
 
 # start boot
 sudo systemctl enable nginx
