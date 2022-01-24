@@ -1,3 +1,30 @@
+Instructions:
+
+sudo apt update
+https://www.nginx.com/blog/using-free-ssltls-certificates-from-lets-encrypt-with-nginx/
+
+
+
+
+
+sudo apt install -y snapd
+COPY
+Then, update the snapd to the latest version.
+
+sudo snap install core; sudo snap refresh coreCOPY
+Finally, install the Certbot client using the snap command.
+
+
+sudo snap install --classic certbot
+
+sudo ln -s /snap/bin/certbot /usr/bin/certbot
+
+apt install python3-certbot-nginx
+
+sudo certbot --nginx
+
+sudo systemctl status certbot.timer
+
 https://medium.com/@steadylearner/how-to-get-https-for-rust-web-app-9ea3e58a9a22
 https://linuxize.com/post/secure-nginx-with-let-s-encrypt-on-debian-9/
 
